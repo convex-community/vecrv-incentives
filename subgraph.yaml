@@ -8,31 +8,61 @@ dataSources:
     source:
       address: "0x54508cbe9142de7f7d8b799743c6fe6146e98db8"
       abi: BribeV3
+      startBlock: 15889898
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - ClearRewardRecipient
-        - NewTokenReward
-        - PeriodUpdated
         - RewardAdded
-        - RewardClaimed
-        - SetRewardRecipient
       abis:
         - name: BribeV3
           file: ./abis/BribeV3.json
       eventHandlers:
-        - event: ClearRewardRecipient(indexed address,address)
-          handler: handleClearRewardRecipient
-        - event: NewTokenReward(indexed address,indexed address)
-          handler: handleNewTokenReward
-        - event: PeriodUpdated(indexed address,indexed uint256,uint256)
-          handler: handlePeriodUpdated
         - event: RewardAdded(indexed address,indexed address,indexed address,uint256)
           handler: handleRewardAdded
-        - event: RewardClaimed(indexed address,indexed address,indexed address,uint256)
-          handler: handleRewardClaimed
-        - event: SetRewardRecipient(indexed address,address)
-          handler: handleSetRewardRecipient
-      file: ./src/mappings.ts
+      file: ./src/mappings-crv.ts
+  - kind: ethereum
+    name: yBribeV3
+    network: mainnet
+    source:
+      address: "0x03dfdbcd4056e2f92251c7b07423e1a33a7d3f6d"
+      abi: yBribeV3
+      startBlock: 15878262
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - RewardAdded
+      abis:
+        - name: yBribeV3
+          file: ./abis/yBribeV3.json
+      eventHandlers:
+        - event: RewardAdded(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleRewardAdded
+        - event: FeeUpdated(uint256)
+          handler: handleFeeUpdated
+      file: ./src/mappings-y.ts
+  - kind: ethereum
+    name: Votium
+    network: mainnet
+    source:
+      address: "0xB4Fb1FD4AEC780BC255bF231189E9A244475d260"
+      abi: Votium
+      startBlock: 14730004
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - RewardAdded
+      abis:
+        - name: Votium
+          file: ./abis/Votium.json
+      eventHandlers:
+        - event: NewReward(indexed address,uint256,indexed uint256,indexed address)
+          handler: handleNewReward
+        - event: UpdatedFee(uint256)
+          handler: handleUpdatedFee
+      file: ./src/mappings-votium.ts

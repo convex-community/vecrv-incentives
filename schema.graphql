@@ -1,6 +1,22 @@
-type ExampleEntity @entity {
+type Platform @entity {
   id: ID!
-  count: BigInt!
-  user: Bytes! # address
-  recipient: Bytes! # address
+  bribes: [Bribe!]
+  currentFee: BigInt!
+}
+
+type Gauge @entity {
+  id: ID!
+  bribes: [Bribe!]
+}
+
+type Bribe @entity {
+  id: ID!
+  gauge: Gauge!
+  platform: Platform!
+  amount: BigInt!
+  token: Bytes!
+  week: BigInt!
+  creationTx: Bytes!
+  updateTx: Bytes
+  depositor: Bytes!
 }
