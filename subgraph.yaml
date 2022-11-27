@@ -1,4 +1,4 @@
-specVersion: 0.0.1
+specVersion: 0.0.4
 schema:
   file: ./schema.graphql
 dataSources:
@@ -35,4 +35,4 @@ dataSources:
           handler: handleRewardClaimed
         - event: SetRewardRecipient(indexed address,address)
           handler: handleSetRewardRecipient
-      file: ./src/bribe-v-3.ts
+      file: ./src/mappings.ts
