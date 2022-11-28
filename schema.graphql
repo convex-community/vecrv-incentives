@@ -13,7 +13,8 @@ type Bribe @entity {
   id: ID!
   gauge: Gauge!
   platform: Platform!
-  amount: BigInt!
+  postedAmount: BigInt!
+  effectiveAmount: BigInt!
   token: Bytes!
   week: BigInt!
   creationTx: Bytes!
