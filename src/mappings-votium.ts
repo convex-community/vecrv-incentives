@@ -2,7 +2,7 @@ import { NewReward, UpdatedFee } from '../generated/Votium/Votium'
 import { getGauge, getPlatform, updatePlatformFee } from './services'
 import { Bribe } from '../generated/schema'
 import { WEEK } from './utils'
-import { BigInt } from '@graphprotocol/graph-ts'
+import { BigInt, log } from '@graphprotocol/graph-ts'
 
 const PLATFORM_NAME = 'Votium'
 
@@ -12,6 +12,7 @@ export function handleNewReward(event: NewReward): void {
   const week = event.params._week.times(WEEK)
   const bribeId = gauge.id + '-' + PLATFORM_NAME + '-' + week.toString()
   let bribe = Bribe.load(bribeId)
+  log.info('New incentive added on {} for token {}', [platform.id, event.params._token.toHexString()])
   if (!bribe) {
     bribe = new Bribe(bribeId)
     bribe.platform = platform.id

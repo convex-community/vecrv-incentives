@@ -1,5 +1,5 @@
 import { Bribe, Gauge, Platform } from '../generated/schema'
-import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts'
+import { log, Address, BigInt, Bytes } from '@graphprotocol/graph-ts'
 import { BribeV3 } from '../generated/BribeV3/BribeV3'
 import { WEEK } from './utils'
 
@@ -33,6 +33,7 @@ export function addBribe(
   tx: Bytes,
   from: Address
 ): void {
+  log.info('New incentive added on {} for token {}', [platform.id, token.toHexString()])
   const bribeId = gauge.id + '-' + platform.id + '-' + week.toString()
   let bribe = Bribe.load(bribeId)
   if (!bribe) {

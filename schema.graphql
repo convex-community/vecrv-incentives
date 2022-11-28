@@ -1,12 +1,12 @@
 type Platform @entity {
   id: ID!
-  bribes: [Bribe!]
+  bribes: [Bribe!] @derivedFrom(field: "platform")
   currentFee: BigInt!
 }
 
 type Gauge @entity {
   id: ID!
-  bribes: [Bribe!]
+  bribes: [Bribe!] @derivedFrom(field: "gauge")
 }
 
 type Bribe @entity {

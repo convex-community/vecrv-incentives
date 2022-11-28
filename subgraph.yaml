@@ -38,6 +38,8 @@ dataSources:
       abis:
         - name: yBribeV3
           file: ./abis/yBribeV3.json
+        - name: BribeV3
+          file: ./abis/BribeV3.json
       eventHandlers:
         - event: RewardAdded(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleRewardAdded
