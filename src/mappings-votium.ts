@@ -27,6 +27,7 @@ export function handleNewReward(event: NewReward): void {
     bribe.postedAmount = bribe.postedAmount.plus(event.params._amount)
     bribe.updateTx = event.transaction.hash
   }
+  bribe.save()
 }
 
 export function handleUpdatedFee(event: UpdatedFee): void {
