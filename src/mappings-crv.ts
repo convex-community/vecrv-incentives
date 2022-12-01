@@ -1,7 +1,8 @@
 import { BribeV3, RewardAdded } from '../generated/BribeV3/BribeV3'
 import { getGauge, getPlatform } from './services'
 import { getIntervalFromTimestamp, WEEK } from './utils'
-import { addBribe } from './ybribe'
+import { addBribe, addClaim } from './ybribe'
+import { RewardClaimed } from '../generated/BribeV3/BribeV3'
 
 const PLATFORM_NAME = 'bribe.crv.finance'
 
@@ -18,5 +19,17 @@ export function handleRewardAdded(event: RewardAdded): void {
     event.params.reward_token,
     event.transaction.hash,
     event.transaction.from
+  )
+}
+
+export function handleClaim(event: RewardClaimed): void {
+  addClaim(
+    PLATFORM_NAME,
+    event.params.gauge,
+    event.params.user,
+    event.params.amount,
+    event.params.reward_token,
+    event.block.timestamp,
+    event.transaction.hash
   )
 }

@@ -21,6 +21,8 @@ dataSources:
       eventHandlers:
         - event: RewardAdded(indexed address,indexed address,indexed address,uint256)
           handler: handleRewardAdded
+        - event: RewardClaimed(indexed address,indexed address,indexed address,uint256)
+          handler: handleClaim
       file: ./src/mappings-crv.ts
   - kind: ethereum
     name: yBribeV3
@@ -45,6 +47,8 @@ dataSources:
           handler: handleRewardAdded
         - event: FeeUpdated(uint256)
           handler: handleFeeUpdated
+        - event: RewardClaimed(indexed address,indexed address,indexed address,uint256)
+          handler: handleClaim
       file: ./src/mappings-y.ts
   - kind: ethereum
     name: Votium

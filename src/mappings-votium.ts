@@ -10,7 +10,7 @@ export function handleNewReward(event: NewReward): void {
   const platform = getPlatform(PLATFORM_NAME)
   const gauge = getGauge(event.params._gauge.toHexString())
   const week = event.params._week.times(WEEK)
-  const bribeId = gauge.id + '-' + PLATFORM_NAME + '-' + week.toString()
+  const bribeId = gauge.id + '-' + PLATFORM_NAME + event.params._token.toHexString() + '-' + week.toString()
   let bribe = Bribe.load(bribeId)
   log.info('New incentive added on {} for token {}', [platform.id, event.params._token.toHexString()])
   if (!bribe) {
