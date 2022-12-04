@@ -1,7 +1,8 @@
 import { BribeV3, RewardAdded } from '../generated/BribeV3/BribeV3'
 import { getGauge, getPlatform } from './services'
 import { getIntervalFromTimestamp, WEEK } from './utils'
-import { addBribe, addClaim } from './common'
+import { addBribe } from './ybribes'
+import { addClaim } from './common'
 import { RewardClaimed } from '../generated/BribeV3/BribeV3'
 
 const PLATFORM_NAME = 'bribe.crv.finance'

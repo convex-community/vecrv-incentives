@@ -2,7 +2,8 @@ import { FeeUpdated, RewardAdded } from '../generated/yBribeV3/yBribeV3'
 import { getGauge, getPlatform, updatePlatformFee } from './services'
 import { BigInt } from '@graphprotocol/graph-ts'
 import { getIntervalFromTimestamp, WEEK } from './utils'
-import { addBribe } from './common'
+import { addBribe } from './ybribes'
+import { addClaim } from './common'
 import { RewardClaimed } from '../generated/yBribeV3/yBribeV3'
 
 const PLATFORM_NAME = 'yBribe'
@@ -28,5 +29,13 @@ export function handleFeeUpdated(event: FeeUpdated): void {
 }
 
 export function handleClaim(event: RewardClaimed): void {
-  return
+  addClaim(
+    PLATFORM_NAME,
+    event.params.gauge,
+    event.params.user,
+    event.params.amount,
+    event.params.reward_token,
+    event.block.timestamp,
+    event.transaction.hash
+  )
 }
