@@ -15,6 +15,7 @@ type Bribe @entity {
   platform: Platform!
   postedAmount: BigInt!
   effectiveAmount: BigInt!
+  totalClaimed: BigInt!
   claims: [Claim!] @derivedFrom(field: "bribe")
   token: Bytes!
   week: BigInt!

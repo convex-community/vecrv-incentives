@@ -1,4 +1,4 @@
-import { Claim } from '../generated/schema'
+import { Bribe, Claim } from '../generated/schema'
 import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts'
 import { getIntervalFromTimestamp, WEEK } from './utils'
 
@@ -20,4 +20,9 @@ export function addClaim(
   claim.bribe = bribeId
   claim.amount = amount
   claim.timestamp = timestamp
+  const bribe = Bribe.load(bribeId)
+  if (bribe) {
+    bribe.totalClaimed = bribe.totalClaimed.plus(amount)
+    bribe.save()
+  }
 }

@@ -45,6 +45,7 @@ export function addBribe(
     bribe.creationTx = tx
     bribe.depositor = from
     bribe.postedAmount = amount
+    bribe.totalClaimed = BigInt.zero()
     const leftOvers = syncPreviousBribe(platform, gauge, bribeContract, token, week)
     bribe.effectiveAmount = amount.plus(leftOvers)
   } else {
