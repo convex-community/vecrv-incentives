@@ -5,6 +5,7 @@
     "codegen": "graph codegen",
     "build": "graph build",
     "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ vecrv-incentives",
+    "deploy-hosted": "graph deploy --node https://api.thegraph.com/deploy/ convex-community/vecrv-incentives",
     "create-local": "graph create --node http://localhost:8020/ vecrv-incentives",
     "remove-local": "graph remove --node http://localhost:8020/ vecrv-incentives",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 vecrv-incentives"
