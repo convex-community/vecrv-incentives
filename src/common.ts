@@ -20,6 +20,7 @@ export function addClaim(
   claim.bribe = bribeId
   claim.amount = amount
   claim.timestamp = timestamp
+  claim.save()
   const bribe = Bribe.load(bribeId)
   if (bribe) {
     bribe.totalClaimed = bribe.totalClaimed.plus(amount)

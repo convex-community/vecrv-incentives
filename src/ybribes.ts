@@ -20,6 +20,7 @@ function syncPreviousBribe(
   const claimed = contract.claims_per_gauge(Address.fromString(gauge.id), token)
   const remainingBalance = rewardBalance.minus(claimed)
   prevBribe.effectiveAmount = prevBribe.effectiveAmount.minus(remainingBalance)
+  prevBribe.save()
   return remainingBalance
 }
 
