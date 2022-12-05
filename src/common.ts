@@ -1,5 +1,5 @@
 import { Bribe, Claim } from '../generated/schema'
-import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts'
+import { Address, BigInt, Bytes, log } from '@graphprotocol/graph-ts'
 import { getIntervalFromTimestamp, WEEK } from './utils'
 
 export function addClaim(
@@ -25,5 +25,11 @@ export function addClaim(
   if (bribe) {
     bribe.totalClaimed = bribe.totalClaimed.plus(amount)
     bribe.save()
+  } else {
+    log.error('Unable to find bribe for claim {}, timestamp: {}, at {}', [
+      bribeId,
+      timestamp.toString(),
+      tx.toHexString(),
+    ])
   }
 }

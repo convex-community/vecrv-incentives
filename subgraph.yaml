@@ -50,8 +50,13 @@ dataSources:
           handler: handleRewardAdded
         - event: FeeUpdated(uint256)
           handler: handleFeeUpdated
-        - event: RewardClaimed(indexed address,indexed address,indexed address,uint256)
-          handler: handleClaim
+      callHandlers:
+        - function: claim_reward(address,address)
+          handler: handleClaimReward
+        - function: claim_reward_for(address,address,address)
+          handler: handleClaimRewardFor
+        - function: claim_reward_for_many(address[],address[],address[])
+          handler: handleClaimRewardForMany
       file: ./src/mappings-y.ts
   - kind: ethereum
     name: Votium

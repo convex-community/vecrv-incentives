@@ -1,57 +1,97 @@
-import { Bribe, Gauge, Platform } from '../generated/schema'
+import { _StatsPerGauge, Bribe, Gauge, Platform } from '../generated/schema'
 import { log, Address, BigInt, Bytes } from '@graphprotocol/graph-ts'
 import { BribeV3 } from '../generated/BribeV3/BribeV3'
-import { WEEK } from './utils'
+import { getIntervalFromTimestamp, WEEK } from './utils'
 
-function syncPreviousBribe(
-  platform: Platform,
-  gauge: Gauge,
-  bribeContract: Address,
+export function getPlatformContract(contract: string): BribeV3 {
+  return BribeV3.bind(Address.fromString(contract))
+}
+
+export function getClaimsAndRewards(token: Address, gauge: Address, contract: Address): Array<BigInt> {
+  const bribeContract = getPlatformContract(contract.toHexString())
+  const rewardPerGauge = bribeContract.reward_per_gauge(gauge, token)
+  const claimsPerGauge = bribeContract.claims_per_gauge(gauge, token)
+  return [claimsPerGauge, rewardPerGauge]
+}
+
+export function updatePeriod(
+  platform: string,
+  contract: Address,
+  gauge: Address,
   token: Address,
-  week: BigInt
+  user: Address,
+  timestamp: BigInt,
+  tx: Bytes
 ): BigInt {
-  const prevBribeId = gauge.id + '-' + platform.id + '-' + token.toHexString() + '-' + week.minus(WEEK).toString()
-  const prevBribe = Bribe.load(prevBribeId)
-  if (!prevBribe) {
-    return BigInt.zero()
+  const week = getIntervalFromTimestamp(timestamp, WEEK)
+  const bribeId = gauge.toHexString() + '-' + platform + '-' + token.toHexString() + '-' + week.toString()
+  let bribe = Bribe.load(bribeId)
+  let amount = BigInt.zero()
+  const stats = _StatsPerGauge.load(gauge.toHexString() + token.toHexString())
+  const claimsAndRewards = getClaimsAndRewards(token, gauge, contract)
+  const claimsPerGauge = claimsAndRewards[0]
+  const rewardPerGauge = claimsAndRewards[1]
+  if (!bribe) {
+    bribe = new Bribe(bribeId)
+    bribe.platform = platform
+    bribe.gauge = gauge.toHexString()
+    bribe.week = week
+    bribe.token = token
+    bribe.creationTx = tx
+    bribe.depositor = user
+    bribe.postedAmount = rewardPerGauge
+
+    bribe.totalClaimed = BigInt.zero()
+    bribe.effectiveAmount = BigInt.zero()
+    if (stats) {
+      bribe.postedAmount = stats.rewardPerGauge
+    }
+    bribe.save()
   }
-  const contract = BribeV3.bind(bribeContract)
-  const rewardBalance = contract.reward_per_gauge(Address.fromString(gauge.id), token)
-  const claimed = contract.claims_per_gauge(Address.fromString(gauge.id), token)
-  const remainingBalance = rewardBalance.minus(claimed)
-  prevBribe.effectiveAmount = prevBribe.effectiveAmount.minus(remainingBalance)
-  prevBribe.save()
-  return remainingBalance
+  if (stats) {
+    amount = stats.rewardPerGauge.minus(rewardPerGauge)
+    stats.rewardPerGauge = rewardPerGauge
+    stats.claimsPerGauge = claimsPerGauge
+    stats.save()
+  }
+  return amount
 }
 
 export function addBribe(
   platform: Platform,
   bribeContract: Address,
-  gauge: Gauge,
+  gauge: Address,
   week: BigInt,
   amount: BigInt,
   token: Address,
   tx: Bytes,
-  from: Address
+  from: Address,
+  contract: Address
 ): void {
   log.info('New incentive added on {} for token {}', [platform.id, token.toHexString()])
-  const bribeId = gauge.id + '-' + platform.id + '-' + token.toHexString() + '-' + week.toString()
+  const bribeId = gauge.toHexString() + '-' + platform.id + '-' + token.toHexString() + '-' + week.toString()
   let bribe = Bribe.load(bribeId)
   if (!bribe) {
     bribe = new Bribe(bribeId)
     bribe.platform = platform.id
-    bribe.gauge = gauge.id
+    bribe.gauge = gauge.toHexString()
     bribe.week = week
     bribe.token = token
     bribe.creationTx = tx
     bribe.depositor = from
     bribe.postedAmount = amount
     bribe.totalClaimed = BigInt.zero()
-    const leftOvers = syncPreviousBribe(platform, gauge, bribeContract, token, week)
-    bribe.effectiveAmount = amount.plus(leftOvers)
+    bribe.effectiveAmount = BigInt.zero()
   } else {
     bribe.postedAmount = bribe.postedAmount.plus(amount)
     bribe.updateTx = tx
   }
   bribe.save()
+  const stats = _StatsPerGauge.load(gauge.toHexString() + token.toHexString())
+  if (stats) {
+    const claimsAndRewards = getClaimsAndRewards(token, gauge, contract)
+    stats.claimsPerGauge = claimsAndRewards[0]
+    stats.rewardPerGauge = claimsAndRewards[1]
+    stats.save()
+  }
 }

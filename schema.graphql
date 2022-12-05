@@ -4,6 +4,12 @@ type Platform @entity {
   currentFee: BigInt!
 }
 
+type _StatsPerGauge @entity {
+  id: ID!
+  claimsPerGauge: BigInt!
+  rewardPerGauge: BigInt!
+}
+
 type Gauge @entity {
   id: ID!
   bribes: [Bribe!] @derivedFrom(field: "gauge")
