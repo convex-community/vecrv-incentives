@@ -15,14 +15,6 @@ export function getClaimsAndRewards(token: Address, gauge: Address, contract: Ad
   return [claimsPerGauge, rewardPerGauge]
 }
 
-export function getPreviousRollover(bribeId: string): BigInt {
-  const bribe = Bribe.load(bribeId)
-  if (!bribe) {
-    return BigInt.zero()
-  }
-  return bribe.postedAmount.minus(bribe.totalClaimed)
-}
-
 export function updatePeriod(
   platform: string,
   contract: Address,
@@ -87,6 +79,9 @@ export function updatePeriod(
       return BigInt.zero()
     }
   }
+  // we only update the postedAmount if it's a new reward
+  // if it's just a roll over triggered by a claim, we consider
+  // the posted amount to be zero
   if (newReward) {
     bribe.postedAmount = addReward
     bribe.effectiveAmount = bribe.previousRollover.plus(bribe.postedAmount)
@@ -103,32 +98,4 @@ export function updatePeriod(
   stats.claimsPerGauge = claimsPerGauge
   stats.save()
   return claimAmount
-}
-
-export function addBribe(
-  platform: Platform,
-  bribeContract: Address,
-  gauge: Address,
-  week: BigInt,
-  token: Address,
-  tx: Bytes,
-  from: Address,
-  contract: Address
-): void {
-  log.info('New incentive added on {} for token {}', [platform.id, token.toHexString()])
-  const bribeId = gauge.toHexString() + '-' + platform.id + '-' + token.toHexString() + '-' + week.toString()
-  const bribe = Bribe.load(bribeId)
-  if (!bribe) {
-    log.error('Impossible to load bribe {} at {}', [bribeId, tx.toHexString()])
-    return
-  }
-  bribe.updateTx = tx
-  bribe.save()
-  const stats = _StatsPerGauge.load(gauge.toHexString() + token.toHexString())
-  if (stats) {
-    const claimsAndRewards = getClaimsAndRewards(token, gauge, contract)
-    stats.claimsPerGauge = claimsAndRewards[0]
-    stats.rewardPerGauge = claimsAndRewards[1]
-    stats.save()
-  }
 }

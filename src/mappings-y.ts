@@ -1,8 +1,7 @@
 import { FeeUpdated, RewardAdded } from '../generated/yBribeV3/yBribeV3'
-import { getGauge, getPlatform, updatePlatformFee } from './services'
+import { updatePlatformFee } from './services'
 import { Address, BigInt } from '@graphprotocol/graph-ts'
-import { getIntervalFromTimestamp, WEEK } from './utils'
-import { addBribe, updatePeriod } from './ybribes'
+import { updatePeriod } from './ybribes'
 import { addClaim } from './common'
 import { Claim_reward_for_manyCall, Claim_reward_forCall, Claim_rewardCall } from '../generated/BribeV3/BribeV3'
 

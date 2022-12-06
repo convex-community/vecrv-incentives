@@ -8,7 +8,7 @@ dataSources:
     source:
       address: "0x54508cbe9142de7f7d8b799743c6fe6146e98db8"
       abi: BribeV3
-      startBlock: 915889898
+      startBlock: 15889898
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -22,8 +22,13 @@ dataSources:
       eventHandlers:
         - event: RewardAdded(indexed address,indexed address,indexed address,uint256)
           handler: handleRewardAdded
-        - event: RewardClaimed(indexed address,indexed address,indexed address,uint256)
-          handler: handleClaim
+      callHandlers:
+        - function: claim_reward(address,address)
+          handler: handleClaimReward
+        - function: claim_reward_for(address,address,address)
+          handler: handleClaimRewardFor
+        - function: claim_reward_for_many(address[],address[],address[])
+          handler: handleClaimRewardForMany
       file: ./src/mappings-crv.ts
   - kind: ethereum
     name: yBribeV3
@@ -87,7 +92,7 @@ dataSources:
     source:
       address: "0x1a8847c80fdc06b86b7b02670fdf6f7e47781594"
       abi: Platform
-      startBlock: 915983901
+      startBlock: 15983901
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
