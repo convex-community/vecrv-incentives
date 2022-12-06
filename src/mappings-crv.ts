@@ -13,17 +13,6 @@ export function handleRewardAdded(event: RewardAdded): void {
   const platform = getPlatform(PLATFORM_NAME)
   getGauge(event.params.gauge.toHexString())
   const week = getIntervalFromTimestamp(event.block.timestamp, WEEK)
-  addBribe(
-    platform,
-    event.address,
-    event.params.gauge,
-    week,
-    event.params.amount,
-    event.params.reward_token,
-    event.transaction.hash,
-    event.transaction.from,
-    CONTRACT
-  )
 }
 
 export function handleClaim(event: RewardClaimed): void {

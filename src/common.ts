@@ -11,6 +11,9 @@ export function addClaim(
   timestamp: BigInt,
   tx: Bytes
 ): void {
+  if (amount == BigInt.zero()) {
+    return
+  }
   const week = getIntervalFromTimestamp(timestamp, WEEK)
   const bribeId = gauge.toHexString() + '-' + platform + '-' + token.toHexString() + '-' + week.toString()
   const claim = new Claim(
@@ -19,6 +22,7 @@ export function addClaim(
   claim.user = user
   claim.bribe = bribeId
   claim.amount = amount
+  claim.tx = tx
   claim.timestamp = timestamp
   claim.save()
   const bribe = Bribe.load(bribeId)

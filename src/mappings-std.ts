@@ -23,6 +23,7 @@ export function handleBribeCreated(event: BribeCreated): void {
     bribe.creationTx = event.transaction.hash
     bribe.depositor = event.transaction.from
     bribe.postedAmount = event.params.rewardPerPeriod
+    bribe.previousRollover = BigInt.zero()
     bribe.effectiveAmount = event.params.rewardPerPeriod
     bribe.totalClaimed = BigInt.zero()
   } else {
@@ -61,6 +62,7 @@ export function handlePeriodRolledOver(event: PeriodRolledOver): void {
   newBribe.updateTx = event.transaction.hash
   newBribe.token = token
   newBribe.postedAmount = event.params.rewardPerPeriod
+  newBribe.previousRollover = BigInt.zero()
   newBribe.totalClaimed = BigInt.zero()
   newBribe.effectiveAmount = event.params.rewardPerPeriod
 

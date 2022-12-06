@@ -20,6 +20,7 @@ type Bribe @entity {
   gauge: Gauge!
   platform: Platform!
   postedAmount: BigInt!
+  previousRollover: BigInt!
   effectiveAmount: BigInt!
   totalClaimed: BigInt!
   claims: [Claim!] @derivedFrom(field: "bribe")
@@ -28,6 +29,7 @@ type Bribe @entity {
   creationTx: Bytes!
   updateTx: Bytes
   depositor: Bytes!
+  timestamp: BigInt
 }
 
 type Claim @entity {
@@ -36,4 +38,5 @@ type Claim @entity {
   user: Bytes!
   timestamp: BigInt!
   amount: BigInt!
+  tx: Bytes!
 }

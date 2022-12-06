@@ -8,7 +8,7 @@ dataSources:
     source:
       address: "0x54508cbe9142de7f7d8b799743c6fe6146e98db8"
       abi: BribeV3
-      startBlock: 15889898
+      startBlock: 915889898
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -64,7 +64,7 @@ dataSources:
     source:
       address: "0xB4Fb1FD4AEC780BC255bF231189E9A244475d260"
       abi: Votium
-      startBlock: 14730004
+      startBlock: 914730004
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -87,7 +87,7 @@ dataSources:
     source:
       address: "0x1a8847c80fdc06b86b7b02670fdf6f7e47781594"
       abi: Platform
-      startBlock: 15983901
+      startBlock: 915983901
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5

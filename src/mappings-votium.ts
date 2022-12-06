@@ -22,6 +22,7 @@ export function handleNewReward(event: NewReward): void {
     bribe.creationTx = event.transaction.hash
     bribe.depositor = event.transaction.from
     bribe.effectiveAmount = event.params._amount
+    bribe.previousRollover = BigInt.zero()
     bribe.totalClaimed = event.params._amount
     bribe.postedAmount = event.params._amount
   } else {
