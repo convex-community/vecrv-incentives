@@ -15,7 +15,6 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - RewardAdded
-        - RewardClaimed
       abis:
         - name: BribeV3
           file: ./abis/BribeV3.json
@@ -44,7 +43,6 @@ dataSources:
       entities:
         - RewardAdded
         - FeeUpdated
-        - RewardClaimed
       abis:
         - name: yBribeV3
           file: ./abis/yBribeV3.json
@@ -98,7 +96,10 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - RewardAdded
+        - BribeCreated
+        - Claimed
+        - BribeClosed
+        - PeriodRolledOver
       abis:
         - name: Platform
           file: ./abis/Platform.json
@@ -112,3 +113,25 @@ dataSources:
         - event: PeriodRolledOver(uint256,uint256,uint256,uint256)
           handler: handlePeriodRolledOver
       file: ./src/mappings-std.ts
+  - kind: ethereum
+    name: PitchMoney
+    network: mainnet
+    source:
+      address: "0x5d135c1a7604bf0b78018a21ba722e9a06e6d096"
+      abi: GaugeIncentivesStash
+      startBlock: 14888039
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - RewardAdded
+      abis:
+        - name: GaugeIncentivesStash
+          file: ./abis/GaugeIncentivesStash.json
+        - name: GaugeController
+          file: ./abis/GaugeController.json
+      eventHandlers:
+        - event: RewardAdded(indexed address,indexed address,address,uint256,uint256,uint256)
+          handler: handleRewardAdded
+      file: ./src/mappings-pitch.ts
